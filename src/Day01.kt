@@ -2,23 +2,14 @@ import kotlin.math.abs
 
 fun main() {
     fun part1(input: List<String>): Int {
-        val list = input.map { line ->
-            val (first, second) = line.split("""\s+""".toRegex()).map(String::toInt)
-            first to second
-        }
+        val (list1, list2) = input
+                .map { line ->
+                    val (first, second) = line.split("""\s+""".toRegex()).map(String::toInt)
+                    first to second
+                }
+                .unzip()
 
-        val list1 = mutableListOf<Int>()
-        val list2 = mutableListOf<Int>()
-
-        for ((first, second) in list) {
-            list1.add(first)
-            list2.add(second)
-        }
-
-        list1.sort()
-        list2.sort()
-
-        return list1.zip(list2).fold(0) { acc, (first, second) ->
+        return list1.sorted().zip(list2.sorted()).fold(0) { acc, (first, second) ->
             acc + abs(first - second)
         }
     }
