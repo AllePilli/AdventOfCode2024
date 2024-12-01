@@ -15,15 +15,33 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val (list1, list2) = input
+                .map { line ->
+                    val (first, second) = line.split("""\s+""".toRegex()).map(String::toInt)
+                    first to second
+                }
+                .unzip()
+
+        val lookup = list2.groupBy { it }
+                .map { (key, entry) -> key to entry.size }
+                .toMap()
+
+        return list1.fold(0) { acc, i ->
+            acc + i * lookup.getOrDefault(i, 0)
+        }
     }
 
-    // Or read a large test input from the `src/Day01_test.txt` file:
     val testInput = readInput("Day01_test")
     check(part1(testInput) == 11)
+    check(part2(testInput) == 31)
 
     // Read the input from the `src/Day01.txt` file.
     val input = readInput("Day01")
-    part1(input).println()
-//    part2(input).println()
+    val resultPart1 = part1(input)
+    check(resultPart1 == 2815556)
+    resultPart1.println()
+
+    val resultPart2 = part2(input)
+    check(resultPart2 == 23927637)
+    resultPart2.println()
 }
