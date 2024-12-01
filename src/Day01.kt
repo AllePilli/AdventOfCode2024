@@ -1,26 +1,23 @@
 import kotlin.math.abs
 
 fun main() {
-    fun part1(input: List<String>): Int {
+    fun prepareInput(input: List<String>): Pair<List<Int>, List<Int>> = input
+            .map { line ->
+                val (first, second) = line.split("""\s+""".toRegex()).map(String::toInt)
+                first to second
+            }
+            .unzip()
+
+    fun part1(input: Pair<List<Int>, List<Int>>): Int {
         val (list1, list2) = input
-                .map { line ->
-                    val (first, second) = line.split("""\s+""".toRegex()).map(String::toInt)
-                    first to second
-                }
-                .unzip()
 
         return list1.sorted().zip(list2.sorted()).fold(0) { acc, (first, second) ->
             acc + abs(first - second)
         }
     }
 
-    fun part2(input: List<String>): Int {
+    fun part2(input: Pair<List<Int>, List<Int>>): Int {
         val (list1, list2) = input
-                .map { line ->
-                    val (first, second) = line.split("""\s+""".toRegex()).map(String::toInt)
-                    first to second
-                }
-                .unzip()
 
         val lookup = list2.groupBy { it }
                 .map { (key, entry) -> key to entry.size }
@@ -31,12 +28,11 @@ fun main() {
         }
     }
 
-    val testInput = readInput("Day01_test")
+    val testInput = prepareInput(readInput("Day01_test"))
     check(part1(testInput) == 11)
     check(part2(testInput) == 31)
 
-    // Read the input from the `src/Day01.txt` file.
-    val input = readInput("Day01")
+    val input = prepareInput(readInput("Day01"))
     val resultPart1 = part1(input)
     check(resultPart1 == 2815556)
     resultPart1.println()
